@@ -128,8 +128,16 @@ if (state === null || state !== storedState) {
         querystring.stringify({
           error: 'invalid_token'
         }));
+
+      res.render('launch',{
+        title:'qe53q5',
+        name: body.display_name
+      });
     }
+    
   });
+  
+
 }
 
 });

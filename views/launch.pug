@@ -1,10 +1,25 @@
 extends layout
 
-block content
-  h1= title
-  p Welcome to #{title}
-  a(href='/login') Log in with Spotify
+block styles  
+  link(rel='stylesheet', href='/stylesheets/launch.css')
 
-  script(type="text/javascript" src ='/javascripts/auth.js')
+
+block content
+
+  #spotify-login
+    h1= title
+    p Welcome to #{title}
+    a(href='/login') Log in with Spotify
+
+  #loggedin
+    #user-profile
+    #oauth
+    .row.text-center
+      .card(id = 'user-card')
+          
+
+
+
+  script(type="text/javascript" src ='/javascripts/launch.js')
 
 
