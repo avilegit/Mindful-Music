@@ -12,6 +12,21 @@
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
     "morgan": "^1.9.1",
-    "pug": "^2.0.3"
-  }
+    "pug": "^2.0.3",
+    "request": "^2.88.0"
+  },
+  "description": "Insights about what I listen to on a daily basis",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avilegit/Mindful-Music.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/avilegit/Mindful-Music/issues"
+  },
+  "homepage": "https://github.com/avilegit/Mindful-Music#readme"
 }
