@@ -5,6 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var querystring = require('querystring');
+                  require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -17,8 +18,8 @@ app.set('port', port);
 var server = require('http').createServer(app);
 
 
-var client_id = 'e931eb291e97415fa82574820e48cd6c'; // Your client id
-var client_secret = '7a82262f255249c9a7bfe9aed1995c3c'; // Your secret
+var client_id = process.env.CLIENT_ID; // Your client id
+var client_secret = process.env.CLIENT_SECRET; // Your secret
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
 
@@ -59,7 +60,7 @@ console.log('attempting login');
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'user-read-private user-read-email';
+  var scope = 'user-read-private user-read-email user-read-recently-played';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
