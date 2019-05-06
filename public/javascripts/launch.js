@@ -28,14 +28,13 @@
             if (access_token) {
               // render oauth info
   
-              $.ajax({
-                  url: 'https://api.spotify.com/v1/me',
-                  headers: {
+                $.ajax({
+                    url: 'https://api.spotify.com/v1/me',
+                    headers: {
                     'Authorization': 'Bearer ' + access_token
-                  },
-                  success: function(response) {
-                    console.log('sickooooooo', response);
-                    console.log(response.images[0].url);
+                    },
+                    success: function(response) {
+                    console.log(response);
 
                     document.getElementById('user-card').innerHTML = //'<img class="card-img-top" src=' + response.images[0].url +  'alt="Card image cap">' +
                         '<div class="card-block">' + 
@@ -45,10 +44,26 @@
                             '<a href="' + response.external_urls.spotify + ' " ' + '>Spotify</a>' +
                             '<p class="card-footer">' + response.country + '</p>'
                         '</div>'
-                  } 
-              });
-              $('#spotify-login').hide();
-              $('#loggedin').show();
+                    } 
+                });
+
+              
+                $('#spotify-login').hide();
+                $('#loggedin').show();
+
+
+                $.ajax({
+                    url: 'https://api.spotify.com/v1/me/player/recently-played',
+                    headers: {
+                      'Authorization': 'Bearer ' + access_token
+                    },
+                    success: function(response) {
+                      console.log('recently played:', response);
+ 
+                    } 
+                });
+
+
             } 
         }
 })();
