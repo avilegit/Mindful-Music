@@ -16,9 +16,10 @@ var port = normalizePort(process.env.PORT || '8888');
 app.set('port', port);
 var server = require('http').createServer(app);
 
+require('dotenv').config();
 
-var client_id = 'e931eb291e97415fa82574820e48cd6c'; // Your client id
-var client_secret = '7a82262f255249c9a7bfe9aed1995c3c'; // Your secret
+var client_id = process.env.CLIENT_ID; // Your client id
+var client_secret = process.env.CLIENT_SECRET; // Your secret
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
 
