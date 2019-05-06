@@ -66,8 +66,14 @@
                 //Read JSON
                 $.getJSON("/sample/tracks.json", function(json) {
                     console.log('got json', json);
+
+                    Display_Graph(json);
                 });
 
             } 
         }
 })();
+
+function Display_Graph(json){
+    
+}
