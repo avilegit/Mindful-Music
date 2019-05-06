@@ -1,9 +1,14 @@
 .card
 {
-    margin-top: 3px;
-    top: 70%;
-    left: 85%;
+    
+}
 
+.user-info
+{
+    left:85%;
+
+    margin-top: 3px;
+    
     padding-top: 30px;
     width: 15rem;
 }
