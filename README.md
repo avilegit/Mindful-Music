@@ -5,7 +5,7 @@ Insights about what I listen to on a daily basis
 Create a .env file in the Mindful-Music root directory
 ```bash
 CLIENT_ID=<your_spotify_client_id>
-CLIENT_SECRET = <your_spotify_secret_id>
+CLIENT_SECRET=<your_spotify_secret_id>
 ```
 
 ## Installation 
