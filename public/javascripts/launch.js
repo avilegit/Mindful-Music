@@ -62,6 +62,12 @@
                         console.log('recently played', response);
                     } 
                 });
+
+                //Read JSON
+                $.getJSON("/sample/tracks.json", function(json) {
+                    console.log('got json', json);
+                });
+
             } 
         }
 })();
