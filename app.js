@@ -107,7 +107,6 @@ if (state === null || state !== storedState) {
       var access_token = body.access_token,
           refresh_token = body.refresh_token;
 
-      // we can also pass the token to the browser to make requests from there
       res.redirect('/#' +
         querystring.stringify({
           access_token: access_token,

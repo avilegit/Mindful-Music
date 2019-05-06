@@ -37,7 +37,8 @@
                         console.log(response);
                         console.log(response.images[0].url);
 
-                        document.getElementById('user-card').innerHTML = //'<img class="card-img-top" src=' + response.images[0].url +  'alt="Card image cap">' +
+                        document.getElementById('user-card').innerHTML = 
+                            '<img class="card-img-top" src=' + response.images[0].url + ' " ' + 'alt="Card image cap">' +
                             '<div class="card-block">' + 
                                 '<h4 class="card-title">'+ response.id +'</h4>' +
                                 '<p class="card-position">' + response.display_name + '</p>' +
@@ -49,7 +50,8 @@
                 });
                 $('#spotify-login').hide();
                 $('#loggedin').show();
-
+                
+                //access rently pl;ayed
                 $.ajax({
                     url: 'https://api.spotify.com/v1/me/player/recently-played',
                     data: {
@@ -62,9 +64,6 @@
                         console.log('recently played', response);
                     } 
                 });
-
-            
-
             } 
         }
 })();
