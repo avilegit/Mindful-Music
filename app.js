@@ -107,17 +107,6 @@ if (state === null || state !== storedState) {
       var access_token = body.access_token,
           refresh_token = body.refresh_token;
 
-      var options = {
-        url: 'https://api.spotify.com/v1/me',
-        headers: { 'Authorization': 'Bearer ' + access_token },
-        json: true
-      };
-
-      // use the access token to access the Spotify Web API
-      request.get(options, function(error, response, body) {
-        console.log(body);
-      });
-
       // we can also pass the token to the browser to make requests from there
       res.redirect('/#' +
         querystring.stringify({
@@ -129,16 +118,8 @@ if (state === null || state !== storedState) {
         querystring.stringify({
           error: 'invalid_token'
         }));
-
-      res.render('launch',{
-        title:'qe53q5',
-        name: body.display_name
-      });
     }
-    
   });
-  
-
 }
 
 });
@@ -218,7 +199,5 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
-
-
 
 module.exports = app;
