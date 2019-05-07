@@ -37,19 +37,21 @@
                         console.log(response);
                         console.log(response.images[0].url);
 
-                        document.getElementById('user-card').innerHTML = //'<img class="card-img-top" src=' + response.images[0].url +  'alt="Card image cap">' +
-                            '<div class="card-block">' + 
-                                '<h4 class="card-title">'+ response.id +'</h4>' +
+                        document.getElementById('user-card').innerHTML = 
+                            '<img class="card-img-top" src=' + response.images[0].url + ' " ' + 'alt="Card image cap">' +
+                            '<div class="card text-white bg-dark mb-3">' + 
+                                '<h1 class="card-title">'+ response.id +'</h4>' +
                                 '<p class="card-position">' + response.display_name + '</p>' +
                                 '<p class="card-position">' + 'followers: ' + response.followers.total + '</p>' +
-                                '<a href="' + response.external_urls.spotify + ' " ' + '>Spotify</a>' +
+                                '<a class="btn btn-outline-success" href="' + response.external_urls.spotify + ' " ' + '>Spotify</a>' +
                                 '<p class="card-footer">' + response.country + '</p>'
                             '</div>'
                     } 
                 });
                 $('#spotify-login').hide();
                 $('#loggedin').show();
-
+                
+                //access rently pl;ayed
                 $.ajax({
                     url: 'https://api.spotify.com/v1/me/player/recently-played',
                     data: {
