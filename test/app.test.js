@@ -10,13 +10,11 @@ describe('test endpoints', () => {
 
     test('call login and expect redirect', async () => {
         const response = await request(app).get('/login');
-        console.log(response.header);
         expect(response.statusCode).toBe(302);
     });
 
     test('call callback and expect redirect', async () => {
         const response = await request(app).get('/callback');
-        //console.log(response);
         expect(response.header.location).toBe("/#error=state_mismatch");
         expect(response.cookies).toBe(undefined);
         expect(response.statusCode).toBe(302);
