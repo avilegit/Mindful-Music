@@ -1,6 +1,24 @@
 const app = require('./../app');
+var request = require('supertest'); 
 
-test('call login', function(done){
+describe('test endpoints', () => {
+    test('call home directory', async () => {
+        const response = await request(app).get('/');
+        expect(response.statusCode).toBe(200);
+    });
 
-    done();
-});
+
+    test('call login and expect redirect', async () => {
+        const response = await request(app).get('/login');
+        console.log(response.header);
+        expect(response.statusCode).toBe(302);
+    });
+
+    test('call callback and expect redirect', async () => {
+        const response = await request(app).get('/callback');
+        //console.log(response);
+        expect(response.header.location).toBe("/#error=state_mismatch");
+        expect(response.cookies).toBe(undefined);
+        expect(response.statusCode).toBe(302);
+    });
+})

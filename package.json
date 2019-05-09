@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
+    "start": "node server.js",
     "test": "jest ./test"
   },
   "dependencies": {
@@ -21,8 +21,12 @@
   "description": "Insights about what I listen to on a daily basis",
   "main": "app.js",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "jest": "^24.8.0",
-    "jest-cli": "^24.8.0"
+    "jest-cli": "^24.8.0",
+    "superagent": "^5.0.5",
+    "supertest": "^4.0.2"
   },
   "repository": {
     "type": "git",

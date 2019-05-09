@@ -12,22 +12,12 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-var debug = require('debug')('Mindful-Music:server');
-// var port = normalizePort(process.env.PORT || '8888');
-// app.set('port', port);
-// var server = require('http').createServer(app);
 
 require('dotenv').config();
 
 var client_id = process.env.CLIENT_ID; // Your client id
 var client_secret = process.env.CLIENT_SECRET; // Your secret
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
-
-
-// server.listen(port);
-// server.on('error', onError);
-// server.on('listening', onListening);
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -56,7 +46,6 @@ var stateKey = 'spotify_auth_state';
 
 app.get('/login', function(req, res) {
 
-console.log('attempting login');
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
@@ -70,6 +59,7 @@ console.log('attempting login');
       redirect_uri: redirect_uri,
       state: state
     }));
+  res.status(200);
 });
 
 app.get('/callback', function(req, res) {
