@@ -3,21 +3,31 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node server.js",
+    "test": "jest ./test"
   },
   "dependencies": {
     "cookie-parser": "^1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^8.0.0",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
     "morgan": "^1.9.1",
+    "nodemon": "^1.19.0",
     "pug": "^2.0.3",
     "request": "^2.88.0"
   },
   "description": "Insights about what I listen to on a daily basis",
   "main": "app.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^24.8.0",
+    "jest-cli": "^24.8.0",
+    "superagent": "^5.0.5",
+    "supertest": "^4.0.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/avilegit/Mindful-Music.git"

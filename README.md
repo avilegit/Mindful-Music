@@ -14,7 +14,12 @@ Access http://localhost:8888
 ```bash
 git clone https://github.com/avilegit/Mindful-Music.git
 npm install
-node app.js
+npm start
+```
+
+## Tests 
+```bash
+npm run test
 ```
 
 ## Contributing
