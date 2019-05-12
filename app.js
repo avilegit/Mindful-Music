@@ -9,19 +9,22 @@ var querystring = require('querystring');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var spawn = require("child_process").spawn; 
+var util = require("util");
 
 var app = express();
 
 
-require('dotenv').config();
-
-var client_id = process.env.CLIENT_ID; // Your client id
-var client_secret = process.env.CLIENT_SECRET; // Your secret
+const env = require('dotenv').config();
+var client_id = env.parsed.CLIENT_ID; // Your client id
+var client_secret = env.parsed.CLIENT_SECRET; // Your secret
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+//app.use(express.bodyParser({limit: '50mb'}));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -43,6 +46,19 @@ var generateRandomString = function(length) {
 };
 
 var stateKey = 'spotify_auth_state';
+
+app.post('/callPython', function(req,res){
+  const pythonProcess = spawn('python',["data/data_collection.py"]);
+  util.log('reading in')
+
+  pythonProcess.stdout.on('data', function(data){
+      var textChunk = data.toString('utf8');// buffer to string
+
+      util.log(textChunk);
+      res.send(data.toString()); 
+
+  });
+});
 
 app.get('/login', function(req, res) {
 
@@ -113,6 +129,7 @@ if (state === null || state !== storedState) {
 }
 
 });
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

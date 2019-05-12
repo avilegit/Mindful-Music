@@ -13,6 +13,8 @@
     {
         if (access_token) 
         {
+
+
             RenderUserInfo(access_token);
 
             //access recently played
@@ -79,11 +81,31 @@ function GetRecentlyPlayed(inAccess_Token){
         },
         async : false,
         success: function(response) {
-            Display_Graph(response);
+            Parse_JSON(response);
+            //Display_Graph(response);
         }
     });
 }
 
 function Display_Graph(inJson){
     console.log(inJson);
+}
+
+function Parse_JSON(inRecentlyPlayed){
+
+    console.log('loggin  json', inRecentlyPlayed)
+    $.ajax({
+        url: "/callPython",
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data:{}, //JSON.stringify(inRecentlyPlayed),
+        success: function(response){
+            console.log(response);
+            //window.location="http://mycity.parseapp.com/city/cgi-bin/test1.py"
+    
+        }
+    });
+
+
 }
