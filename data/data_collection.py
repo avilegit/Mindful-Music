@@ -1,8 +1,8 @@
-# import spotipy
-# import spotipy.util as util
-# import pandas as pd
-# import json
-#import lyricsgenius
+import spotipy
+import spotipy.util as util
+import pandas as pd
+import json
+import sys
 
 # class Recents:
 #     def __init__(self, inJson, inToken):
@@ -67,7 +67,21 @@
 
 #data = json.load(sys.stdin)
 #recent_tracks = Recents(data, data.authtoken)
-import sys
-data = "testing python"
-print(data)
-sys.stdout.flush()
+# data = json.loads(sys.argv[1])
+# dumps = json.dumps(data)
+
+#Read data from stdin
+def read_in():
+    recentlyPlayedString = sys.stdin.readlines()
+    #Since our input would only be having one line, parse our JSON data from that
+    return json.loads(recentlyPlayedString[0])
+
+def main():
+    #get our data as an array from read_in()
+    recentlyPlayedJSON = read_in()
+
+    print('jason!!!',recentlyPlayedJSON)
+
+#start process
+if __name__ == '__main__':
+    main()

@@ -95,15 +95,17 @@ function Parse_JSON(inRecentlyPlayed){
 
     console.log('loggin  json', inRecentlyPlayed)
     $.ajax({
-        url: "/callPython",
+        url: "/pythonFormat",
         type: "POST",
         contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        data:{}, //JSON.stringify(inRecentlyPlayed),
+        dataType: "text",
+        data: JSON.stringify(inRecentlyPlayed),
         success: function(response){
-            console.log(response);
-            //window.location="http://mycity.parseapp.com/city/cgi-bin/test1.py"
+            console.log('got the response', response);
     
+        },
+        error: function(err){
+            console.log('error', err.responseText);
         }
     });
 
