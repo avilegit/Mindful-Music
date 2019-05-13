@@ -81,7 +81,7 @@ function GetRecentlyPlayed(inAccess_Token){
         },
         async : false,
         success: function(response) {
-            Parse_JSON(response);
+            Parse_JSON(response, inAccess_Token);
             //Display_Graph(response);
         }
     });
@@ -91,21 +91,24 @@ function Display_Graph(inJson){
     console.log(inJson);
 }
 
-function Parse_JSON(inRecentlyPlayed){
+function Parse_JSON(inRecentlyPlayed, inAccess_Token){
 
-    console.log('loggin  json', inRecentlyPlayed)
+    console.log('logging json', inRecentlyPlayed)
     $.ajax({
         url: "/pythonFormat",
         type: "POST",
         contentType: "application/json; charset=utf-8",
-        dataType: "text",
+        dataType: "json",
         data: JSON.stringify(inRecentlyPlayed),
+ 
         success: function(response){
-            console.log('got the response', response);
+            console.log('incoming', response);
+            console.log('JSON incoming', JSON.parse(response));
     
         },
         error: function(err){
-            console.log('error', err.responseText);
+            //var returned = JSON.parse(err);
+            //console.log('error', returned);
         }
     });
 

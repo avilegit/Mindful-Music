@@ -17,6 +17,7 @@
     "morgan": "^1.9.1",
     "nodemon": "^1.19.0",
     "pug": "^2.0.3",
+    "python-shell": "^1.0.7",
     "request": "^2.88.0"
   },
   "description": "Insights about what I listen to on a daily basis",
