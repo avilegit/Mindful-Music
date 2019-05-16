@@ -151,11 +151,11 @@ function Parse_JSON(inRecentlyPlayed){
         dataType: "json",
         data:  JSON.stringify(dataPayload),
         success: function(response){
-            console.log('incoming', response);
-            console.log('JSON incoming', JSON.parse(response));
+            recentlyPlayedFormatted = JSON.parse(response)
+            console.log('JSON incoming', recentlyPlayedFormatted);
         },
         error: function(err){
-            
+
         }
     });
 

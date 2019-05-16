@@ -50,7 +50,7 @@ var generateRandomString = function(length) {
 var stateKey = 'spotify_auth_state';
 
 app.post('/pythonFormat', function(req,res){
-  var returned_json;
+  var returned_json = "";
 
   console.log('req',req.body.songs);
 
@@ -66,12 +66,11 @@ app.post('/pythonFormat', function(req,res){
     console.error(`child stderr:\n${data}`);
   });
   py.stdout.on('data', function(data){
-    console.log(data.toString())
-    returned_json = JSON.stringify(data.toString());// buffer to string
+    returned_json += data.toString();// buffer to string
   });
 
   py.stdout.on('end', function(){
-    res.send(returned_json); 
+    res.send(JSON.stringify(returned_json)); 
   });
 });
 
