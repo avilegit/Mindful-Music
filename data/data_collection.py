@@ -8,7 +8,7 @@ class Recents:
     def __init__(self, inSongs):
 
         recently_played = inSongs
-        row_list = []
+        row_list = {}
 
         for items in recently_played:
             song = {}
@@ -17,6 +17,7 @@ class Recents:
             song['artist']     = items['track']['artists'][0]['name']
             song['artist_id']  = items['track']['artists'][0]['id']
             song['popularity'] = items['track']['popularity']
+            song['plays']      = 1
 
             features = items['features']
             if len(features) is not 0:
@@ -37,12 +38,16 @@ class Recents:
             #     song['lyrics'] = search_lyrics.lyrics
             #     print(search_lyrics)
 
-            row_list.append(song)
+            if song['track_id'] in row_list.keys():
+                row_list[song['track_id']]['plays'] += 1
+            else:
+                row_list[song['track_id']] = song
         
-        self.recently_played = pd.DataFrame(row_list)
-        print('check',self.recently_played)
+        self.recently_played = pd.DataFrame(row_list.values())
         self.recently_played.to_json('last_50_with_lyrics.json')
         self.recently_played.to_csv('last_50_with_lyrics.csv')
+        json = self.recently_played.to_json(orient = 'index')
+        print(json)
 
     
     def get_max_feature(self, feature):
