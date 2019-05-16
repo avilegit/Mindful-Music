@@ -8,7 +8,7 @@ class Recents:
     def __init__(self, inSongs):
 
         recently_played = inSongs
-        row_list = {}
+        row_list = []
 
         for items in recently_played:
             song = {}
@@ -38,12 +38,19 @@ class Recents:
             #     song['lyrics'] = search_lyrics.lyrics
             #     print(search_lyrics)
 
-            if song['track_id'] in row_list.keys():
-                row_list[song['track_id']]['plays'] += 1
+            repeat = next((i for i,d in enumerate(row_list) if song['track_id'] in d.values()),None)
+            if repeat is not None:
+                row_list[repeat]['plays'] +=1
             else:
-                row_list[song['track_id']] = song
-        
-        self.recently_played = pd.DataFrame(row_list.values())
+                row_list.append(song)
+
+
+            # if any(d['track_id'] == song['track_id'] for d in row_list):
+            #     d['plays'] += 1
+            # else:
+            #     row_list.append(song)
+
+        self.recently_played = pd.DataFrame(row_list)
         self.recently_played.to_json('last_50_with_lyrics.json')
         self.recently_played.to_csv('last_50_with_lyrics.csv')
         json = self.recently_played.to_json(orient = 'index')
