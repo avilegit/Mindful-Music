@@ -52,10 +52,14 @@ var stateKey = 'spotify_auth_state';
 app.post('/pythonFormat', function(req,res){
   var returned_json;
 
-  console.log('req',req.body);
+  console.log('req',req.body.songs);
+
+  var pythonPayload = {
+    songs : req.body.songs.items,
+  }
 
   const py = spawn('python',["data/data_collection.py", req.body.items]);
-  py.stdin.write(JSON.stringify(req.body.items));
+  py.stdin.write(JSON.stringify(pythonPayload));
   py.stdin.end();
 
   py.stderr.on('data', (data) => {
@@ -94,7 +98,6 @@ app.get('/callback', function(req, res) {
 // your application requests refresh and access tokens
 // after checking the state parameter
 
-console.log('callback!');
 var code = req.query.code || null;
 var state = req.query.state || null;
 var storedState = req.cookies ? req.cookies[stateKey] : null;

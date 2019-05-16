@@ -70,7 +70,7 @@ function RenderUserInfo(inAccess_Token) {
     $('#loggedin').show();
 }
 
-function GetRecentlyPlayed(inAccess_Token){
+async function GetRecentlyPlayed(inAccess_Token){
     $.ajax({
         url: 'https://api.spotify.com/v1/me/player/recently-played',
         data: {
@@ -81,36 +81,84 @@ function GetRecentlyPlayed(inAccess_Token){
         },
         async : false,
         success: function(response) {
-            Parse_JSON(response, inAccess_Token);
+            GetAudioFeatures(response, inAccess_Token);
             //Display_Graph(response);
         }
     });
+
+    
 }
+
 
 function Display_Graph(inJson){
     console.log(inJson);
 }
 
-function Parse_JSON(inRecentlyPlayed, inAccess_Token){
+function GetAudioFeatures(inRecentlyPlayed, inAccess_Token){
 
-    console.log('logging json', inRecentlyPlayed)
+    var promises = [];
+
+    for(var i = 0; i < inRecentlyPlayed.items.length; i++){
+        song_id = inRecentlyPlayed.items[i].track.id;
+
+        promises.push(GetSpotAudioFeatures(song_id, inAccess_Token, i).then(function(features){
+            inRecentlyPlayed.items[features.index].features = features.payload;
+        }));
+    }
+    Promise.all(promises).then(function(){
+        console.log('all promises resolved');
+        Parse_JSON(inRecentlyPlayed);
+    }, function(err){
+
+    });
+
+    console.log('final loop',inRecentlyPlayed);
+    return inRecentlyPlayed;
+}
+
+function GetSpotAudioFeatures(inTrackID, inAccess_Token, index){
+    var def = $.Deferred();
+    $.ajax({ 
+        url: "https://api.spotify.com/v1/audio-features/" + inTrackID,
+        type: "GET",
+        dataType: "json",
+        headers: {
+            'Authorization': 'Bearer ' + inAccess_Token
+        },
+        success: function(data){
+            var response = {
+                payload: data,
+                index  : index
+            }
+            def.resolve(response)
+        },
+        error: function(){
+            def.reject();
+        }
+    }); 
+    return def.promise();
+}
+
+function Parse_JSON(inRecentlyPlayed){
+
+    dataPayload = {
+        songs   : inRecentlyPlayed,
+    }
     $.ajax({
         url: "/pythonFormat",
         type: "POST",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        data: JSON.stringify(inRecentlyPlayed),
- 
+        data:  JSON.stringify(dataPayload),
         success: function(response){
             console.log('incoming', response);
             console.log('JSON incoming', JSON.parse(response));
-    
         },
         error: function(err){
-            //var returned = JSON.parse(err);
-            //console.log('error', returned);
+            
         }
     });
 
 
 }
+
