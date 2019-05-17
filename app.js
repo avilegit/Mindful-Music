@@ -9,12 +9,13 @@ var querystring = require('querystring');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var spawn = require("child_process").spawn; 
+var util = require("util");
 
 var app = express();
 
 
-require('dotenv').config();
-
+const env = require('dotenv').config();
 var client_id = process.env.CLIENT_ID; // Your client id
 var client_secret = process.env.CLIENT_SECRET; // Your secret
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
@@ -22,6 +23,10 @@ var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -43,6 +48,31 @@ var generateRandomString = function(length) {
 };
 
 var stateKey = 'spotify_auth_state';
+
+app.post('/pythonFormat', function(req,res){
+  var returned_json = "";
+
+  console.log('req',req.body.songs);
+
+  var pythonPayload = {
+    songs : req.body.songs.items,
+  }
+
+  const py = spawn('python',["data/data_collection.py", req.body.items]);
+  py.stdin.write(JSON.stringify(pythonPayload));
+  py.stdin.end();
+
+  py.stderr.on('data', (data) => {
+    console.error(`child stderr:\n${data}`);
+  });
+  py.stdout.on('data', function(data){
+    returned_json += data.toString();// buffer to string
+  });
+
+  py.stdout.on('end', function(){
+    res.send(JSON.stringify(returned_json)); 
+  });
+});
 
 app.get('/login', function(req, res) {
 
@@ -67,7 +97,6 @@ app.get('/callback', function(req, res) {
 // your application requests refresh and access tokens
 // after checking the state parameter
 
-console.log('callback!');
 var code = req.query.code || null;
 var state = req.query.state || null;
 var storedState = req.cookies ? req.cookies[stateKey] : null;
@@ -113,6 +142,7 @@ if (state === null || state !== storedState) {
 }
 
 });
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
