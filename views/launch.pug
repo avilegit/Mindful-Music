@@ -2,10 +2,15 @@ extends layout
 
 block styles  
   link(rel='stylesheet', href='/stylesheets/launch.css')
-  
+
 
 block content
+  script(type="text/javascript" src ='/javascripts/bubblechart.js')
 
+  style.
+    body {
+        background: #2C3E50;
+    }
   #spotify-login
     h1= title
     p Welcome to #{title}
@@ -14,7 +19,9 @@ block content
   #loggedin
     .row.text-center
       .card(id = 'user-card', class='user-profile')
-          
+    #graph
   script(type="text/javascript" src ='/javascripts/launch.js')
+
+
 
 

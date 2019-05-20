@@ -17,6 +17,7 @@ class Recents:
             song['artist']     = items['track']['artists'][0]['name']
             song['artist_id']  = items['track']['artists'][0]['id']
             song['popularity'] = items['track']['popularity']
+            song['image']      = items['track']['album']['images'][0]['url']
             song['plays']      = 1
 
             features = items['features']
@@ -52,7 +53,7 @@ class Recents:
 
         self.recently_played = pd.DataFrame(row_list)
         self.recently_played.to_json('last_50_with_lyrics.json')
-        self.recently_played.to_csv('last_50_with_lyrics.csv')
+        #self.recently_played.to_csv('last_50_with_lyrics.csv')
         json = self.recently_played.to_json(orient = 'index')
         print(json)
 
