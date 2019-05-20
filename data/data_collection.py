@@ -17,6 +17,7 @@ class Recents:
             song['artist']     = items['track']['artists'][0]['name']
             song['artist_id']  = items['track']['artists'][0]['id']
             song['popularity'] = items['track']['popularity']
+            song['image']      = items['track']['album']['images'][0]['url']
             song['plays']      = 1
 
             features = items['features']
@@ -50,11 +51,14 @@ class Recents:
             # else:
             #     row_list.append(song)
 
+        recently_played = pd.DataFrame(row_list)
+        self.mean_feature = recently_played.mean(axis = 0)
+        row_list.append(self.mean_feature)
+        
         self.recently_played = pd.DataFrame(row_list)
-        self.recently_played.to_json('last_50_with_lyrics.json')
-        self.recently_played.to_csv('last_50_with_lyrics.csv')
-        json = self.recently_played.to_json(orient = 'index')
-        print(json)
+        recently_played_json = self.recently_played.to_json(orient = 'index')
+
+        print(recently_played_json)
 
     
     def get_max_feature(self, feature):

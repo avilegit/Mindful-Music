@@ -1,0 +1,126 @@
+var bubbleChart = function (data) {
+
+    var height = 1000,
+        width = 1000;
+
+    var svg = d3.select('#graph')
+                    .append('svg')
+					.attr('width', width)
+                    .attr('height', height)
+                    .append("g")
+                    .attr("transform", "translate(0,0)")
+
+    var defs = svg.append('svg:defs');
+
+
+    var radiusScale = d3.scaleSqrt().domain([1,50]).range([20,400])
+    var fontScale   = d3.scaleSqrt().domain([1,50]).range([8,40])
+     
+    var simulation = d3.forceSimulation()
+                    .force("x",d3.forceX(height/2).strength(0.05))
+                    .force("y",d3.forceY(width/2).strength(0.05))
+                    .force("collide",d3.forceCollide(function(d){
+                        return radiusScale(d.plays) + 2
+                    }));
+
+    var tooltip = d3.select("#graph")
+                    .append("div")
+                    .style("position", "absolute")
+                    .style("visibility", "hidden")
+                    .style("color", "white")
+                    .style("padding", "8px")
+                    .style("background-color", "rgba(0, 0, 0, 0.75)")
+                    .style("border-radius", "6px")
+                    .style("text-align", "center")
+                    .style("font", "12px sans-serif")
+                    .text("");
+    processData(data);
+
+    function processData(data) {
+        var circles = svg.selectAll("circle")
+                .data(Object.values(data))
+                .enter()
+                .append("circle")
+                .attr("r",function(d){
+                    return radiusScale(d.plays)
+                })
+                //.attr("fill","lightblue")
+                .attr("cx", 300)
+                .attr("cy", 300)
+                .on('click', function(d){
+                    console.log(d);
+                })
+                .style("fill", function(d) {
+                    var returnColor;
+                    var plays = d.plays
+                    if (plays <=2) { returnColor = "steelblue";
+                    } else if (plays <= 10) { returnColor = "SpringGreen";
+                    } else if (plays <= 20) { returnColor = "lightcoral"; 
+                    } else if (plays <= 30) { returnColor = '#6600FF'; }
+                    return returnColor;
+                })
+                // .style('fill', function(d){
+                //     return "url(#testtone)"
+                // })
+                .on("mouseover", function(d){
+                    tooltip.html(d.name +", "+ d.artist+", "+d.plays); 
+                    return tooltip.style("visibility", "visible");
+                })
+                .on("mousemove", function(){
+                    return tooltip.style("top", (d3.event.pageY- 10)+"px").style("left",(d3.event.pageX+10)+"px");
+                })
+                .on("mouseout", function(){
+                    return tooltip.style("visibility", "hidden");
+                });
+
+        //d3.selectAll("circle").append("image")
+        // data.forEach(function(d, i) {
+        //     defs.append("svg:pattern")
+        //             .attr("id", "testtone")
+        //             .attr("xlink:href", function(d){
+        //                 return d.image;
+        //             })
+        //             .attr("width", 150)
+        //             .attr("height", 200)
+        //             .attr("x", 0)
+        //             .attr("y", 0);
+        // })
+
+        let texts = svg.selectAll(null)
+                .data(Object.values(data))
+                .enter()
+                .append('text')
+                .attr("dy", ".3em")
+                .attr("font-family", "sans-serif")
+                .attr("font-size", function(d){
+                    return fontScale(d.plays);
+                })
+                .style("text-anchor", "middle")
+                .text(function(d){
+                    var regex = "^[^\(]+";
+                    return d.name.match(regex);
+                })
+                .attr('color', 'black')
+
+        simulation.nodes(Object.values(data))
+                .on('tick',update)
+
+        function update(){
+            circles
+                .attr("cx",function(d){
+                    return d.x;
+                })
+                .attr("cy",function(d){
+                    return d.y;
+                })
+
+            texts.attr('x', (d) => {
+                    return d.x
+                })
+                .attr('y', (d) => {
+                    return d.y
+                });
+        } 
+    }
+
+}
