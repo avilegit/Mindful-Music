@@ -1,3 +1,5 @@
+var recentlyPlayedFormatted;
+
 (function() {
 
     $('#loggedin').hide();
@@ -20,12 +22,6 @@
             //access recently played
             GetRecentlyPlayed(access_token);
             
-            //Read JSON
-            $.getJSON("/sample/tracks.json", function(json) {
-                console.log('got json', json);
-
-                //Display_Graph(json);
-            });
 
         } 
     }
@@ -53,8 +49,6 @@ function RenderUserInfo(inAccess_Token) {
             'Authorization': 'Bearer ' + inAccess_Token
         },
         success: function(response) {
-            console.log(response);
-
             document.getElementById('user-card').innerHTML = 
                 '<img class="card-img-top" src=' + response.images[0].url + ' " ' + 'alt="Card image cap">' +
                 '<div class="card text-white bg-dark mb-3">' + 
@@ -63,14 +57,13 @@ function RenderUserInfo(inAccess_Token) {
                     '<p class="card-position">' + 'followers: ' + response.followers.total + '</p>' +
                     '<a class="btn btn-outline-success" href="' + response.external_urls.spotify + ' " ' + '>Spotify</a>' +
                     '<p class="card-footer">' + response.country + '</p>'
-                '</div>'
         } 
     });
     $('#spotify-login').hide();
     $('#loggedin').show();
 }
 
-async function GetRecentlyPlayed(inAccess_Token){
+function GetRecentlyPlayed(inAccess_Token){
     $.ajax({
         url: 'https://api.spotify.com/v1/me/player/recently-played',
         data: {
@@ -86,12 +79,17 @@ async function GetRecentlyPlayed(inAccess_Token){
         }
     });
 
-    
 }
 
 
-function Display_Graph(inJson){
-    console.log(inJson);
+var Display_Graph = function(inJson){
+    var width = 600,
+    height = 400;
+
+    function chart(selection){
+    }
+
+    return chart;
 }
 
 function GetAudioFeatures(inRecentlyPlayed, inAccess_Token){
@@ -113,7 +111,6 @@ function GetAudioFeatures(inRecentlyPlayed, inAccess_Token){
     });
 
     console.log('final loop',inRecentlyPlayed);
-    return inRecentlyPlayed;
 }
 
 function GetSpotAudioFeatures(inTrackID, inAccess_Token, index){
@@ -139,6 +136,7 @@ function GetSpotAudioFeatures(inTrackID, inAccess_Token, index){
     return def.promise();
 }
 
+//send to python backend
 function Parse_JSON(inRecentlyPlayed){
 
     dataPayload = {
@@ -153,6 +151,7 @@ function Parse_JSON(inRecentlyPlayed){
         success: function(response){
             recentlyPlayedFormatted = JSON.parse(response)
             console.log('JSON incoming', recentlyPlayedFormatted);
+            bubbleChart(recentlyPlayedFormatted);
         },
         error: function(err){
 
