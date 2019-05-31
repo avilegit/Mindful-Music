@@ -6,6 +6,7 @@ block styles
 
 block content
   script(type="text/javascript" src ='/javascripts/bubblechart.js')
+  script(type="text/javascript" src ='/javascripts/barchart.js')
 
   style.
     body {
@@ -17,9 +18,11 @@ block content
     a(href='/login') Log in with Spotify
 
   #loggedin
-    .row.text-center
-      .card(id = 'user-card', class='user-profile')
-    #graph
+    .container-fluid
+      .row.text-center
+        .card(id = 'user-card', class='user-profile')
+      #graph
+    #bar
   script(type="text/javascript" src ='/javascripts/launch.js')
 
 

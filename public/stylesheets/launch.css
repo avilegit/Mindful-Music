@@ -1,11 +1,7 @@
-.user-profile
-{
-    
-}
 
 .user-profile
 {
-    left:85%;
+    left:25%;
     width: 15rem;
 }
 
@@ -13,4 +9,23 @@
 {
     margin-left: 25%;
     width: 50%;
+}
+
+.row.text-center
+{
+    /*margin-left: 75%;*/
+    float:right;
+    width:25%;
+}
+
+#graph
+{
+    margin-right:25%;
+    /*float: left;*/
+}
+
+.container-fluid
+{
+    margin: auto;
+
 }

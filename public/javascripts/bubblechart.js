@@ -17,8 +17,8 @@ var bubbleChart = function (data) {
     var fontScale   = d3.scaleSqrt().domain([1,50]).range([8,40])
      
     var simulation = d3.forceSimulation()
-                    .force("x",d3.forceX(height/2).strength(0.05))
-                    .force("y",d3.forceY(width/2).strength(0.05))
+                    .force("x",d3.forceX(width/1.5).strength(0.05))
+                    .force("y",d3.forceY(height/3.5).strength(0.05))
                     .force("collide",d3.forceCollide(function(d){
                         return radiusScale(d.plays) + 2
                     }));
@@ -30,9 +30,10 @@ var bubbleChart = function (data) {
                     .style("color", "white")
                     .style("padding", "8px")
                     .style("background-color", "rgba(0, 0, 0, 0.75)")
-                    .style("border-radius", "6px")
-                    .style("text-align", "center")
+                    .style("border-radius", "8px")
+                    .style("text-align", "left")
                     .style("font", "12px sans-serif")
+                    .style("padding","12px")
                     .text("");
     processData(data);
 
@@ -44,6 +45,8 @@ var bubbleChart = function (data) {
                 .attr("r",function(d){
                     return radiusScale(d.plays)
                 })
+                .style("stroke-width", 2.5)    // set the stroke width
+                .style("stroke", "black")      // set the line colour
                 //.attr("fill","lightblue")
                 .attr("cx", 300)
                 .attr("cy", 300)
@@ -59,11 +62,15 @@ var bubbleChart = function (data) {
                     } else if (plays <= 30) { returnColor = '#6600FF'; }
                     return returnColor;
                 })
-                // .style('fill', function(d){
-                //     return "url(#testtone)"
-                // })
                 .on("mouseover", function(d){
-                    tooltip.html(d.name +", "+ d.artist+", "+d.plays); 
+                    if(d.plays > 1)
+                    {
+                        tooltip.html(d.name +"<br> "+ d.artist+"<br>"+ "Plays: "+d.plays); 
+                    }
+                    else
+                    {
+                        tooltip.html(d.name +"<br> "+ d.artist); 
+                    }
                     return tooltip.style("visibility", "visible");
                 })
                 .on("mousemove", function(){

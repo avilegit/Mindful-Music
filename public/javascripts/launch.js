@@ -143,8 +143,8 @@ function Parse_JSON(inRecentlyPlayed){
             var metrics_idx = Object.keys(recentlyPlayedFormatted).length - 1
             metrics = recentlyPlayedFormatted[metrics_idx]
             delete recentlyPlayedFormatted[metrics_idx]
-            console.log('metrics',metrics)
             bubbleChart(recentlyPlayedFormatted);
+            barChart(metrics);
         },
         error: function(err){
 
