@@ -24,8 +24,20 @@
     /*float: left;*/
 }
 
+#miniMetric
+{
+    margin-right:0%;
+    float: right;
+}
+
 .container-fluid
 {
     margin: auto;
 
 }
+
+#miniMetric path,line
+{
+    fill:none;
+    stroke: black;
+ }

@@ -51,7 +51,7 @@ function RenderUserInfo(inAccess_Token) {
         success: function(response) {
             document.getElementById('user-card').innerHTML = 
                 '<img class="card-img-top" src=' + response.images[0].url + ' " ' + 'alt="Card image cap">' +
-                '<div class="card text-white bg-dark mb-3">' + 
+                '<div class="card text-white bg-dark">' + 
                     '<h1 class="card-title">'+ response.id +'</h4>' +
                     '<p class="card-position">' + response.display_name + '</p>' +
                     '<p class="card-position">' + 'followers: ' + response.followers.total + '</p>' +
@@ -144,7 +144,7 @@ function Parse_JSON(inRecentlyPlayed){
             metrics = recentlyPlayedFormatted[metrics_idx]
             delete recentlyPlayedFormatted[metrics_idx]
             bubbleChart(recentlyPlayedFormatted);
-            barChart(metrics);
+            //barChart(metrics);
         },
         error: function(err){
 

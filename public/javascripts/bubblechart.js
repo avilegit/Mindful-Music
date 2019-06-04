@@ -10,9 +10,6 @@ var bubbleChart = function (data) {
                     .append("g")
                     .attr("transform", "translate(0,0)")
 
-    var defs = svg.append('svg:defs');
-
-
     var radiusScale = d3.scaleSqrt().domain([1,50]).range([20,400])
     var fontScale   = d3.scaleSqrt().domain([1,50]).range([8,40])
      
@@ -47,7 +44,6 @@ var bubbleChart = function (data) {
                 })
                 .style("stroke-width", 2.5)    // set the stroke width
                 .style("stroke", "black")      // set the line colour
-                //.attr("fill","lightblue")
                 .attr("cx", 300)
                 .attr("cy", 300)
                 .on('click', function(d){
@@ -71,27 +67,24 @@ var bubbleChart = function (data) {
                     {
                         tooltip.html(d.name +"<br> "+ d.artist); 
                     }
+                    d3.select(this).style('opacity', 0.7);
+                    d3.select(this).style("stroke-width", 4);
+
+                    miniMetric(d);
+
                     return tooltip.style("visibility", "visible");
                 })
                 .on("mousemove", function(){
                     return tooltip.style("top", (d3.event.pageY- 10)+"px").style("left",(d3.event.pageX+10)+"px");
                 })
                 .on("mouseout", function(){
+                    d3.select(this).style('opacity', 1);
+                    d3.select(this).style("stroke-width", 2.5)
+
+                    removeMiniMetric();
+                    
                     return tooltip.style("visibility", "hidden");
                 });
-
-        //d3.selectAll("circle").append("image")
-        // data.forEach(function(d, i) {
-        //     defs.append("svg:pattern")
-        //             .attr("id", "testtone")
-        //             .attr("xlink:href", function(d){
-        //                 return d.image;
-        //             })
-        //             .attr("width", 150)
-        //             .attr("height", 200)
-        //             .attr("x", 0)
-        //             .attr("y", 0);
-        // })
 
         let texts = svg.selectAll(null)
                 .data(Object.values(data))

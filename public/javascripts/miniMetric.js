@@ -1,80 +1,43 @@
-var barChart = function (data) {
+var miniMetric = function (data) {
 
-    var height = 1000,
-    width = 1000,
-    barWidth = 60,
+    var height = 400,
+    width = 200,
+    barWidth = 40,
     animateDuration = 700
     animateDelay = 30;
 
-
-    delete data.artist;
-    delete data.artist_id;
-    delete data.duration;
-    delete data.image;
-    delete data.key;
-    delete data.name;
-    delete data.plays;
-    delete data.popularity;
-    delete data.tempo;
-    delete data.time_signature;
-    delete data.track_id;
-
     metrics = []    
     for(var i in data)
-        metrics.push([i, data [i]]);
+    {
+        if(i === "dance" || i === "energy" || i === "instrumental" || i === "liveness" || i === "valence")
+        {
+            metrics.push([i, data[i]]);
+        }
+    }
 
     const yScale = d3.scaleLinear()
+        .domain([0, 1])
         .range([0, height])
-        .domain([0, 1]);
 
-    const verScale = d3.scaleLinear()
-        .range([height, 0])
-        .domain([0, 1]);
+    var vAxis = d3.axisLeft(yScale)
+        .ticks(3)
 
     const xScale = d3.scaleBand()
-        .range([0, height])
-        .domain(0,1);
-    
-    const horiScale = d3.scaleBand()
-        .padding(0.1)
+        .domain(metrics.map(function(d){
+            return String(d[0]);
+        }))
         .range([0, width])
+        .padding(0);
 
-    
+    var hAxis = d3.axisBottom(xScale)
+        .ticks(metrics.length)
+        .tickValues(xScale.domain());
+
     const colours = d3.scaleLinear()
-        .domain([0,metrics.length])
-        .range(['#00FFBF','#00FA9A']);
+        .domain([0,metrics.length - 1])
+        .range(['#18CAE6','#18CAFF']);
 
-    var vAxis = d3.axisLeft(verScale)
-            .ticks(6)
-            .tickPadding(6)
-
-    var hAxis = d3.axisBottom(horiScale)
-                .ticks(metrics.length)
-                .tickValues(horiScale.domain().filter(function(d,i){
-                    return d[0];
-                }));
-    
-    var vGuide = d3.select('svg')
-        .append('g')
-            vAxis(vGuide)
-            vGuide.attr('transform', 'translate(30,0)')
-            vGuide.selectAll('path')
-                .style('fill','none')
-                .style('stroke','#000')
-            vGuide.selectAll('line')
-                .style('stroke','#000')
-    var hGuide = d3.select('svg')
-        .append('g')
-            hAxis(hGuide)
-            hGuide.attr('transform', 'translate(30,'+(height -10) +')')
-            hGuide.selectAll('path')
-                .style('fill','none')
-                .style('stroke','#000')
-            hGuide.selectAll('line')
-                .style('stroke','#000')
-
-
-    var tooltip = d3.select("#graph")
+    var tooltip = d3.select("#miniMetric")
                 .append("div")
                 .style("position", "absolute")
                 .style("visibility", "hidden")
@@ -87,12 +50,12 @@ var barChart = function (data) {
                 .style("padding","12px")
                 .text("");
 
-    var svg = d3.select('#bar')
+    var svg = d3.select('#miniMetric')
                     .append('svg')
                     .attr('width', width)
                     .attr('height', height)
                     .append("g")
-                    .attr("transform", "translate(0,0)")
+                    .attr("transform", "translate(0,-60)")
                     .selectAll("rect")
                         .data(metrics)
                         .enter().append('rect')
@@ -122,17 +85,47 @@ var barChart = function (data) {
                                 return tooltip.style("visibility", "hidden");
                             });
 
-    horiScale.domain(function(d){
-        return d[0];
-    })
+    var hGuide = d3.select('#miniMetric').select('svg').append("g")
+                    hAxis(hGuide)
+                    hGuide.attr('transform', 'translate(0,'+(height -60) +')')
+                    .selectAll("text")
+                        .style("text-anchor", "start")
+                        .attr("transform", function(d) {
+                            return "rotate(65)" 
+                            })
+                        .style('color','black')
+                        .style('font-size','14')
 
-    svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(horiScale));
-    
+    var vGuide = d3.select('#miniMetric').select('svg').append("g")
+                    vAxis(vGuide)
+                    vGuide.attr('transform', 'translate(0,-60)')
+                    .selectAll("text")
+                        .style("text-anchor", "start")
+                        .style('color','black')
+                        .style('font-size','14')
+
+                   
+
+    // var xAxis = d3.select('#miniMetric').select('svg').append("g")
+    //     .classed("xAxis", true)
+    //     .attr("transform", "translate(0," + height + ")")
+    //     .call(d3.axisBottom(xScale))
+    //     //.selectAll('text')
+
+
+        
+    // //  d3.select('#miniMetric').select('svg').selectAll('line')
+    // //         .attr('stroke','black')
+            
+    // d3.select('#miniMetric').selectAll('.x.axis')
+    //         .attr('fill','black')
+    // d3.select(".x.axis")
+    //     .attr("fill", "black")
+
+
     svg.transition()
         .attr('height', function(d){
-            return  yScale(d[1]);
+            return yScale(d[1]);
         })
         .attr('y',function(d,i){
             return height - yScale(d[1]);
@@ -141,21 +134,9 @@ var barChart = function (data) {
         .delay(function(d,i){
             return i * animateDelay;
         })
-     
+}
 
-//     svg.append("g")
-//       .call(d3.axisBottom(xScale));
-  
-//     svg.append("g")
-//       .call(d3.axisLeft(yScale));
-
-//     svg.selectAll()
-//       .data(metrics)
-//       .enter()
-//       .append('rect')
-//       .attr("class", "bar")
-//       .attr('x', function(d) {xScale(Object.keys(d));})
-//       .attr('y', (d) => yScale(Object.values(d)))
-//       .attr('height', (d) => height - yScale(Object.values(d)))
-//       .attr('width', xScale.bandwidth())
+var removeMiniMetric = function(){
+    d3.select("#miniMetric").selectAll("svg").remove();
+    d3.select("#miniMetric").selectAll("div").remove();
 }

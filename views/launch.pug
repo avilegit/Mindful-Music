@@ -7,6 +7,7 @@ block styles
 block content
   script(type="text/javascript" src ='/javascripts/bubblechart.js')
   script(type="text/javascript" src ='/javascripts/barchart.js')
+  script(type="text/javascript" src ='/javascripts/miniMetric.js')
 
   style.
     body {
@@ -20,7 +21,8 @@ block content
   #loggedin
     .container-fluid
       .row.text-center
-        .card(id = 'user-card', class='user-profile')
+        .card(id = 'user-card', class='user-profile') 
+      #miniMetric
       #graph
     #bar
   script(type="text/javascript" src ='/javascripts/launch.js')
