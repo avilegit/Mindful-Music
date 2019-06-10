@@ -1,10 +1,12 @@
 var miniMetric = function (data) {
 
-    var height = 400,
-    width = 200,
-    barWidth = 40,
-    animateDuration = 700
+    var margin = {top: 20, right: 20, bottom: 80, left: 30};
+
+    var height = 450 - margin.top - margin.bottom,
+    width = 300 - margin.left - margin.right,
+    animateDuration = 700,
     animateDelay = 30;
+
 
     metrics = []    
     for(var i in data)
@@ -14,20 +16,22 @@ var miniMetric = function (data) {
             metrics.push([i, data[i]]);
         }
     }
+    //swap ijnstrumentalness index
+    [metrics[2], metrics[4]] = [metrics[4], metrics[2]];
 
     const yScale = d3.scaleLinear()
         .domain([0, 1])
-        .range([0, height])
+        .range([height, 0])
 
     var vAxis = d3.axisLeft(yScale)
         .ticks(3)
 
     const xScale = d3.scaleBand()
         .domain(metrics.map(function(d){
-            return String(d[0]);
+            return capitalizedString(d[0])
         }))
         .range([0, width])
-        .padding(0);
+        .padding(0.1);
 
     var hAxis = d3.axisBottom(xScale)
         .ticks(metrics.length)
@@ -52,20 +56,20 @@ var miniMetric = function (data) {
 
     var svg = d3.select('#miniMetric')
                     .append('svg')
-                    .attr('width', width)
-                    .attr('height', height)
+                    .attr('width', width + margin.left + margin.right)
+                    .attr('height', height + margin.top + margin.bottom)
                     .append("g")
-                    .attr("transform", "translate(0,-60)")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
                     .selectAll("rect")
                         .data(metrics)
                         .enter().append('rect')
                             .style('fill', function(d,i){
                                 return colours(i);
                             })
-                            .attr('width', barWidth)
+                            .attr('width', xScale.bandwidth)
                             .attr('height', 0)
                             .attr('x', function (d,i) {
-                                return i * (barWidth);
+                                return xScale(capitalizedString(d[0]))
                             })
                             .attr('y',height)
                             .style("stroke-width", 1)    // set the stroke width
@@ -87,7 +91,7 @@ var miniMetric = function (data) {
 
     var hGuide = d3.select('#miniMetric').select('svg').append("g")
                     hAxis(hGuide)
-                    hGuide.attr('transform', 'translate(0,'+(height -60) +')')
+                    hGuide.attr('transform', 'translate(' + margin.left +','+(height + margin.top) +')')
                     .selectAll("text")
                         .style("text-anchor", "start")
                         .attr("transform", function(d) {
@@ -98,42 +102,31 @@ var miniMetric = function (data) {
 
     var vGuide = d3.select('#miniMetric').select('svg').append("g")
                     vAxis(vGuide)
-                    vGuide.attr('transform', 'translate(0,-60)')
+                    vGuide.attr('transform', 'translate(' + margin.left +','+ margin.top +')')
                     .selectAll("text")
-                        .style("text-anchor", "start")
+                        .style("text-anchor", "end")
                         .style('color','black')
                         .style('font-size','14')
 
-                   
-
-    // var xAxis = d3.select('#miniMetric').select('svg').append("g")
-    //     .classed("xAxis", true)
-    //     .attr("transform", "translate(0," + height + ")")
-    //     .call(d3.axisBottom(xScale))
-    //     //.selectAll('text')
-
-
-        
-    // //  d3.select('#miniMetric').select('svg').selectAll('line')
-    // //         .attr('stroke','black')
-            
-    // d3.select('#miniMetric').selectAll('.x.axis')
-    //         .attr('fill','black')
-    // d3.select(".x.axis")
-    //     .attr("fill", "black")
-
-
     svg.transition()
-        .attr('height', function(d){
+        .attr('y',function(d,i)
+        {
             return yScale(d[1]);
         })
-        .attr('y',function(d,i){
+        .attr('height', function(d)
+        {
             return height - yScale(d[1]);
         })
         .duration(animateDuration)
-        .delay(function(d,i){
+        .delay(function(d,i)
+        {
             return i * animateDelay;
         })
+}
+
+capitalizedString = function(name)
+{
+    return name.charAt(0).toUpperCase() + name.slice(1)
 }
 
 var removeMiniMetric = function(){
