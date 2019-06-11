@@ -1,11 +1,7 @@
-.user-profile
-{
-    
-}
 
 .user-profile
 {
-    left:85%;
+    left:25%;
     width: 15rem;
 }
 
@@ -14,3 +10,35 @@
     margin-left: 25%;
     width: 50%;
 }
+
+.row.text-center
+{
+    /*margin-left: 75%;*/
+    float:right;
+    width:25%;
+}
+
+#graph
+{
+    margin-right:25%;
+    /*float: left;*/
+}
+
+#miniMetric
+{   
+    margin-top:0%;
+    margin-right:0%;
+    float: right;
+}
+
+.container-fluid
+{
+    margin: auto;
+
+}
+
+#miniMetric path,line
+{
+    fill:none;
+    stroke: black;
+ }

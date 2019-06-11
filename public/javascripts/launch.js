@@ -51,7 +51,7 @@ function RenderUserInfo(inAccess_Token) {
         success: function(response) {
             document.getElementById('user-card').innerHTML = 
                 '<img class="card-img-top" src=' + response.images[0].url + ' " ' + 'alt="Card image cap">' +
-                '<div class="card text-white bg-dark mb-3">' + 
+                '<div class="card text-white bg-dark">' + 
                     '<h1 class="card-title">'+ response.id +'</h4>' +
                     '<p class="card-position">' + response.display_name + '</p>' +
                     '<p class="card-position">' + 'followers: ' + response.followers.total + '</p>' +
@@ -75,21 +75,9 @@ function GetRecentlyPlayed(inAccess_Token){
         async : false,
         success: function(response) {
             GetAudioFeatures(response, inAccess_Token);
-            //Display_Graph(response);
         }
     });
 
-}
-
-
-var Display_Graph = function(inJson){
-    var width = 600,
-    height = 400;
-
-    function chart(selection){
-    }
-
-    return chart;
 }
 
 function GetAudioFeatures(inRecentlyPlayed, inAccess_Token){
@@ -151,13 +139,15 @@ function Parse_JSON(inRecentlyPlayed){
         success: function(response){
             recentlyPlayedFormatted = JSON.parse(response)
             console.log('JSON incoming', recentlyPlayedFormatted);
+            var metrics_idx = Object.keys(recentlyPlayedFormatted).length - 1
+            metrics = recentlyPlayedFormatted[metrics_idx]
+            delete recentlyPlayedFormatted[metrics_idx]
             bubbleChart(recentlyPlayedFormatted);
+            //barChart(metrics);
         },
         error: function(err){
 
         }
     });
-
-
 }
 
