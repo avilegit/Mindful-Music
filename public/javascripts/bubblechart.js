@@ -1,25 +1,58 @@
 var bubbleChart = function (data) {
 
-    var height = 1000,
-        width = 1000;
+    var margin = {top: 20, right: 20, bottom: 80, left: 30};
+
+    var height = 1000  - margin.top - margin.bottom, 
+        width = 1000 - margin.left - margin.right;
 
     var svg = d3.select('#graph')
                     .append('svg')
-					.attr('width', width)
-                    .attr('height', height)
+					.attr('width', width + margin.left + margin.right)
+                    .attr('height', height + margin.top + margin.bottom)
                     .append("g")
-                    .attr("transform", "translate(0,0)")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
     var radiusScale = d3.scaleSqrt().domain([1,50]).range([20,400])
     var fontScale   = d3.scaleSqrt().domain([1,50]).range([8,40])
-     
-    var simulation = d3.forceSimulation()
-                    .force("x",d3.forceX(width/1.5).strength(0.05))
-                    .force("y",d3.forceY(height/3.5).strength(0.05))
 
-                    .force("collide",d3.forceCollide(function(d){
-                        return radiusScale(d.plays) + 2
-                    }));
+    var x = d3.scaleLinear()
+        .domain([0, 1])
+        .range([ 0, width ]);
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+     // Add X axis label:
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", width)
+        .attr("y", height+50 )
+        .text("Valence");
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+        .domain([0, 1])
+        .range([ height, 0]);
+    svg.append("g")
+        .call(d3.axisLeft(y));
+
+    // Add Y axis label:
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", 0)
+        .attr("y", -20 )
+        .text("Life expectancy")
+        .attr("text-anchor", "start")
+        .text("Energy");
+
+
+     
+    // var simulation = d3.forceSimulation()
+    //                 .force("x",d3.forceX(width/1.5).strength(0.05))
+    //                 .force("y",d3.forceY(height/3.5).strength(0.05))
+    //                 .force("collide",d3.forceCollide(function(d){
+    //                     return radiusScale(d.plays) + 2
+    //                 }));
 
     var tooltip = d3.select("#graph")
                     .append("div")
@@ -38,15 +71,19 @@ var bubbleChart = function (data) {
     function processData(data) {
         var circles = svg.selectAll("circle")
                 .data(Object.values(data))
-                .enter()
-                .append("circle")
+                .enter().append("circle")
                 .attr("r",function(d){
                     return radiusScale(d.plays)
                 })
                 .style("stroke-width", 2.5)    // set the stroke width
                 .style("stroke", "black")      // set the line colour
-                .attr("cx", 300)
-                .attr("cy", 300)
+                .style('opacity', 0.8)
+                .attr("cx", function(d){
+                    return x(d.valence)
+                })
+                .attr("cy", function(d){
+                    return y(d.energy)
+                })
                 .on('click', function(d){
                     console.log(d);
                 })
@@ -102,25 +139,25 @@ var bubbleChart = function (data) {
                 })
                 .attr('color', 'black')
 
-        simulation.nodes(Object.values(data))
-                .on('tick',update)
+        // simulation.nodes(Object.values(data))
+        //         .on('tick',update)
 
-        function update(){
-            circles
-                .attr("cx",function(d){
-                    return d.x;
-                })
-                .attr("cy",function(d){
-                    return d.y;
-                })
+        // function update(){
+        //     circles
+        //         .attr("cx",function(d){
+        //             return d.x;
+        //         })
+        //         .attr("cy",function(d){
+        //             return d.y;
+        //         })
 
-            texts.attr('x', (d) => {
-                    return d.x
-                })
-                .attr('y', (d) => {
-                    return d.y
-                });
-        } 
+        //     texts.attr('x', (d) => {
+        //             return d.x
+        //         })
+        //         .attr('y', (d) => {
+        //             return d.y
+        //         });
+        //} 
     }
 
 }
