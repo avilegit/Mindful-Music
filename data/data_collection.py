@@ -59,7 +59,6 @@ class Recents:
         recently_played_json = self.recently_played.to_json(orient = 'index')
 
         print(recently_played_json)
-
     
     def get_max_feature(self, feature):
         return(max(self.recently_played[feature]))

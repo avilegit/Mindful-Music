@@ -16,6 +16,7 @@ var bubbleChart = function (data) {
     var simulation = d3.forceSimulation()
                     .force("x",d3.forceX(width/1.5).strength(0.05))
                     .force("y",d3.forceY(height/3.5).strength(0.05))
+
                     .force("collide",d3.forceCollide(function(d){
                         return radiusScale(d.plays) + 2
                     }));
@@ -71,7 +72,6 @@ var bubbleChart = function (data) {
                     d3.select(this).style("stroke-width", 4);
 
                     miniMetric(d);
-
                     return tooltip.style("visibility", "visible");
                 })
                 .on("mousemove", function(){
@@ -82,9 +82,9 @@ var bubbleChart = function (data) {
                     d3.select(this).style("stroke-width", 2.5)
 
                     removeMiniMetric();
-                    
                     return tooltip.style("visibility", "hidden");
                 });
+
 
         let texts = svg.selectAll(null)
                 .data(Object.values(data))

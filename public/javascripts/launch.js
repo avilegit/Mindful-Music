@@ -80,7 +80,6 @@ function GetRecentlyPlayed(inAccess_Token){
 
 }
 
-
 function GetAudioFeatures(inRecentlyPlayed, inAccess_Token){
 
     var promises = [];
