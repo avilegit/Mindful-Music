@@ -19,6 +19,7 @@ class Recents:
             song['popularity'] = items['track']['popularity']
             song['image']      = items['track']['album']['images'][0]['url']
             song['plays']      = 1
+            song['valid']      = items['valid']
 
             features = items['features']
             if len(features) is not 0:
@@ -32,24 +33,12 @@ class Recents:
                 song['key']             = features['key']
                 song['mode']            = features['mode']
                 song['time_signature']  = features['time_signature']
-            
-            # search_lyrics = genius.search_song(song['name'], song['artist'])
-            # if search_lyrics is not None and (search_lyrics.title.lower() == song['name'].lower()
-            #                                  or search_lyrics.artist.lower() == song['artist'].lower()):
-            #     song['lyrics'] = search_lyrics.lyrics
-            #     print(search_lyrics)
 
             repeat = next((i for i,d in enumerate(row_list) if song['track_id'] in d.values()),None)
             if repeat is not None:
                 row_list[repeat]['plays'] +=1
-            else:
+            elif song['valid'] is True:
                 row_list.append(song)
-
-
-            # if any(d['track_id'] == song['track_id'] for d in row_list):
-            #     d['plays'] += 1
-            # else:
-            #     row_list.append(song)
 
         recently_played = pd.DataFrame(row_list)
         self.mean_feature = recently_played.mean(axis = 0)

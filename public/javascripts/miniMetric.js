@@ -1,9 +1,9 @@
 var miniMetric = function (data) {
 
-    var margin = {top: 20, right: 20, bottom: 80, left: 30};
+    var margin = {top: 5, right: 30, bottom: 60, left: 30};
 
-    var height = 450 - margin.top - margin.bottom,
-    width = 300 - margin.left - margin.right,
+    var height = 350 - margin.top - margin.bottom,
+    width = 240 - margin.left - margin.right,
     animateDuration = 700,
     animateDelay = 30;
 
@@ -11,16 +11,16 @@ var miniMetric = function (data) {
     metrics = []    
     for(var i in data)
     {
-        if(i === "dance" || i === "energy" || i === "instrumental" || i === "liveness" || i === "valence")
+        if(i === "dance" || i === "energy" || i === "liveness" || i === "valence")// || i === "instrumental")
         {
             metrics.push([i, data[i]]);
         }
     }
     //swap ijnstrumentalness index
-    [metrics[2], metrics[4]] = [metrics[4], metrics[2]];
+    //[metrics[2], metrics[4]] = [metrics[4], metrics[2]];
 
     const yScale = d3.scaleLinear()
-        .domain([0, 1])
+        .domain([0, 100])
         .range([height, 0])
 
     var vAxis = d3.axisLeft(yScale)
@@ -28,7 +28,7 @@ var miniMetric = function (data) {
 
     const xScale = d3.scaleBand()
         .domain(metrics.map(function(d){
-            return capitalizedString(d[0])
+            return capitalizedString(d[0]).charAt(0)
         }))
         .range([0, width])
         .padding(0.1);
@@ -69,19 +69,19 @@ var miniMetric = function (data) {
                             .attr('width', xScale.bandwidth)
                             .attr('height', 0)
                             .attr('x', function (d,i) {
-                                return xScale(capitalizedString(d[0]))
+                                return xScale(capitalizedString(d[0]).charAt(0))
                             })
                             .attr('y',height)
                             .style("stroke-width", 1)    // set the stroke width
                             .style("stroke", "black")    
                             .on("mouseover", function(d){
-                                tooltip.html(d[0] +": "+ d[1]); 
+                                tooltip.html(capitalizedString(d[0]) +": "+ Math.round(d[1] *100) + '%'); 
                                 d3.select(this).style('opacity', 0.7);
                                 d3.select(this).style("stroke-width", 2);
                                 return tooltip.style("visibility", "visible");
                             })
                             .on("mousemove", function(){
-                                return tooltip.style("top", (d3.event.pageY- 10)+"px").style("left",(d3.event.pageX+10)+"px");
+                                return tooltip.style("top", (d3.event.pageY- 520)+"px").style("left",(d3.mouse(this)[0]+80)+"px");
                             })
                             .on("mouseout", function(){
                                 d3.select(this).style('opacity', 1);
@@ -94,10 +94,10 @@ var miniMetric = function (data) {
                     hGuide.attr('transform', 'translate(' + margin.left +','+(height + margin.top) +')')
                     .selectAll("text")
                         .style("text-anchor", "start")
-                        .attr("transform", function(d) {
-                            return "rotate(65)" 
-                            })
-                        .style('color','black')
+                        // .attr("transform", function(d) {
+                        //         return "rotate(65)" 
+                        //     })
+                        .style('color','white')
                         .style('font-size','14')
 
     var vGuide = d3.select('#miniMetric').select('svg').append("g")
@@ -105,23 +105,30 @@ var miniMetric = function (data) {
                     vGuide.attr('transform', 'translate(' + margin.left +','+ margin.top +')')
                     .selectAll("text")
                         .style("text-anchor", "end")
-                        .style('color','black')
+                        .style('color','white')
                         .style('font-size','14')
 
     svg.transition()
         .attr('y',function(d,i)
         {
-            return yScale(d[1]);
+            return yScale(d[1] *100);
         })
         .attr('height', function(d)
         {
-            return height - yScale(d[1]);
+            return height - yScale(d[1]*100);
         })
         .duration(animateDuration)
         .delay(function(d,i)
         {
             return i * animateDelay;
         })
+
+    document.getElementById('mm-header').innerHTML = 
+        '<h3>Audio Features' + '</h3>' + 
+        '<h5>'+ data.name +'</h5>' +
+        '<p class="mb-1">' + data.artist +
+        '</p>' 
+    ;
 }
 
 capitalizedString = function(name)

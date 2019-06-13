@@ -1,8 +1,35 @@
 
 .user-profile
 {
+    float: right;
+
     left:25%;
     width: 15rem;
+    margin-bottom:7%;
+
+}
+
+.bubbleChart
+{
+    width: 33%;
+    float: left;
+
+}
+
+.miniMetricCard
+{
+    float: right;
+    width: 20%
+
+}
+
+.list-group
+{
+    width: 38%;
+    margin-right:5%;
+    float: left;
+    max-height: 800px;
+    overflow:scroll;
 }
 
 .btn 
@@ -20,20 +47,19 @@
 
 #graph
 {
-    margin-right:25%;
+    /* margin-right:5%; */
     /*float: left;*/
 }
-
 #miniMetric
 {   
-    margin-top:0%;
-    margin-right:0%;
+
     float: right;
 }
 
 .container-fluid
 {
     margin: auto;
+    height: 1000px;
 
 }
 

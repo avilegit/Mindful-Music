@@ -5,6 +5,8 @@ block styles
 
 
 block content
+  script(type="text/javascript" src ='/javascripts/musicalsummary.js')
+  script(type="text/javascript" src ='/javascripts/topTracks.js')
   script(type="text/javascript" src ='/javascripts/bubblechart.js')
   script(type="text/javascript" src ='/javascripts/barchart.js')
   script(type="text/javascript" src ='/javascripts/miniMetric.js')
@@ -21,11 +23,28 @@ block content
 
   #loggedin
     .container-fluid
+      .list-group
       .row.text-center
         .card(id = 'user-card', class='user-profile') 
-      #miniMetric
-      #graph
-    #bar
+      .card.bg-dark.text-white(id='graph' class='bubbleChart') 
+        .card-header
+          h1.mb-1  Your Recently Played
+          h3 Positivity vs Energy
+        .card-body
+          #graph
+      .card.bg-dark.text-white(id='mm' class='miniMetricCard') 
+        .card-header(id='mm-header' class='miniMetricCard-header')
+            h3.mb-1  Audio Features
+        .card-body
+          #miniMetric
+
+
+
+      //.card.bg-dark.text-white(id='mm' class='miniMetric') 
+      
+
+
+
   script(type="text/javascript" src ='/javascripts/launch.js')
 
 

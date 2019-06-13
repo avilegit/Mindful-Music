@@ -27,10 +27,6 @@ var recentlyPlayedFormatted;
     }
 })();
 
-/**
- * Obtains parameters from the hash of the URL
- * @return Object
- */
 function GetHashParams() {
     var hashParams = {};
     var e, r = /([^&;=]+)=?([^&;]*)/g,
@@ -53,10 +49,10 @@ function RenderUserInfo(inAccess_Token) {
                 '<img class="card-img-top" src=' + response.images[0].url + ' " ' + 'alt="Card image cap">' +
                 '<div class="card text-white bg-dark">' + 
                     '<h1 class="card-title">'+ response.id +'</h4>' +
-                    '<p class="card-position">' + response.display_name + '</p>' +
-                    '<p class="card-position">' + 'followers: ' + response.followers.total + '</p>' +
-                    '<a class="btn btn-outline-success" href="' + response.external_urls.spotify + ' " ' + '>Spotify</a>' +
-                    '<p class="card-footer">' + response.country + '</p>'
+                    '<p class="card-position">' + response.display_name + ', ' + response.country + '</p>' +
+                    '<p class="card-position">' + 'followers: ' + response.followers.total + '</p>'
+                    //'<a class="btn btn-outline-success" href="' + response.external_urls.spotify + ' " ' + '>Spotify</a>' +
+                    //'<p class="card-footer">' + response.country + '</p>'
         } 
     });
     $('#spotify-login').hide();
@@ -72,7 +68,6 @@ function GetRecentlyPlayed(inAccess_Token){
         headers: {
             'Authorization': 'Bearer ' + inAccess_Token
         },
-        async : false,
         success: function(response) {
             GetAudioFeatures(response, inAccess_Token);
         }
@@ -87,18 +82,28 @@ function GetAudioFeatures(inRecentlyPlayed, inAccess_Token){
     for(var i = 0; i < inRecentlyPlayed.items.length; i++){
         song_id = inRecentlyPlayed.items[i].track.id;
 
-        promises.push(GetSpotAudioFeatures(song_id, inAccess_Token, i).then(function(features){
-            inRecentlyPlayed.items[features.index].features = features.payload;
-        }));
+        promises.push(GetSpotAudioFeatures(song_id, inAccess_Token, i).then(successCB,failureCB));
     }
+
+
+    function successCB(features){
+        inRecentlyPlayed.items[features.index].features = features.payload;
+        inRecentlyPlayed.items[features.index].valid = true;
+
+    }
+    function failureCB(error){
+        console.log('got error ', error);
+        inRecentlyPlayed.items[error.index].features = [];
+        inRecentlyPlayed.items[error.index].valid = false;
+
+    }
+
     Promise.all(promises).then(function(){
-        console.log('all promises resolved');
+        console.log('all promises resolved', inRecentlyPlayed);
         Parse_JSON(inRecentlyPlayed);
     }, function(err){
 
     });
-
-    console.log('final loop',inRecentlyPlayed);
 }
 
 function GetSpotAudioFeatures(inTrackID, inAccess_Token, index){
@@ -117,8 +122,9 @@ function GetSpotAudioFeatures(inTrackID, inAccess_Token, index){
             }
             def.resolve(response)
         },
-        error: function(){
-            def.reject();
+        error: function(error){
+            error.index = index;
+            def.reject(error);
         }
     }); 
     return def.promise();
@@ -143,7 +149,7 @@ function Parse_JSON(inRecentlyPlayed){
             metrics = recentlyPlayedFormatted[metrics_idx]
             delete recentlyPlayedFormatted[metrics_idx]
             bubbleChart(recentlyPlayedFormatted);
-            //barChart(metrics);
+            musicalsummary(recentlyPlayedFormatted)
         },
         error: function(err){
 
