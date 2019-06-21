@@ -1,5 +1,3 @@
-import spotipy
-import spotipy.util as util
 import pandas as pd
 import json
 import sys

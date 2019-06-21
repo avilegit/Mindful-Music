@@ -3,7 +3,7 @@ var topTracks = function(inTopTracks, inInterpretations)
     if(inTopTracks.length)
     {
         $('.list-group').append("<li class='list-group-item list-group-item flex-column align-items-start text-white bg-dark'>"+
-                                        '<h1 class="mb-1"> Your Top Tracks </h1>' + '<br>' +
+                                        '<h2 class="mb-1"> Your Top Tracks </h2>' + '<br>' +
                                         '<div class="card text-white bg-dark mb-3">' + 
                                             '<div class="card-header">' + 
                                                 '<h4> Musical Breakdown </h4>' +                                           

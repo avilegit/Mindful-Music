@@ -3,7 +3,6 @@ extends layout
 block styles  
   link(rel='stylesheet', href='/stylesheets/launch.css')
 
-
 block content
   script(type="text/javascript" src ='/javascripts/musicalsummary.js')
   script(type="text/javascript" src ='/javascripts/topTracks.js')
@@ -11,25 +10,23 @@ block content
   script(type="text/javascript" src ='/javascripts/barchart.js')
   script(type="text/javascript" src ='/javascripts/miniMetric.js')
 
-
   style.
     body {
         background: #2C3E50;
     }
   #spotify-login
-    h1= title
-    p Welcome to #{title}
-    a(href='/login') Log in with Spotify
+
 
   #loggedin
+    h1.mb-1(style = "color:white") Mindful Music
     .container-fluid
       .list-group
       .row.text-center
         .card(id = 'user-card', class='user-profile') 
       .card.bg-dark.text-white(id='graph' class='bubbleChart') 
         .card-header
-          h1.mb-1  Your Recently Played
-          h3 Positivity vs Energy
+          h2.mb-1  Your Recently Played
+          h4 Positivity vs Energy
         .card-body
           #graph
       .card.bg-dark.text-white(id='mm' class='miniMetricCard') 
@@ -38,15 +35,11 @@ block content
         .card-body
           #miniMetric
 
-
-
-      //.card.bg-dark.text-white(id='mm' class='miniMetric') 
-      
-
-
-
   script(type="text/javascript" src ='/javascripts/launch.js')
-
-
-
-
+  script.
+    var redirectLocation = "http://localhost:8888/"; // Redirect destination
+    console.log(location.pathname)
+    if (location.pathname == "/") {
+      // Redirect logic
+      window.location.replace('/login/')
+    }

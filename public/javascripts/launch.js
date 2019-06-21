@@ -1,8 +1,9 @@
 var recentlyPlayedFormatted;
 
 (function() {
-
+    console.log('run')
     $('#loggedin').hide();
+    
     var params = GetHashParams();
     var access_token = params.access_token,
         refresh_token = params.refresh_token,
@@ -15,14 +16,10 @@ var recentlyPlayedFormatted;
     {
         if (access_token) 
         {
-
-
             RenderUserInfo(access_token);
 
             //access recently played
             GetRecentlyPlayed(access_token);
-            
-
         } 
     }
 })();
@@ -72,11 +69,9 @@ function GetRecentlyPlayed(inAccess_Token){
             GetAudioFeatures(response, inAccess_Token);
         }
     });
-
 }
 
 function GetAudioFeatures(inRecentlyPlayed, inAccess_Token){
-
     var promises = [];
 
     for(var i = 0; i < inRecentlyPlayed.items.length; i++){
@@ -156,4 +151,3 @@ function Parse_JSON(inRecentlyPlayed){
         }
     });
 }
-
