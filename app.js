@@ -16,8 +16,8 @@ var app = express();
 
 
 const env = require('dotenv').config();
-var client_id = 'e931eb291e97415fa82574820e48cd6c'; // Your client id
-var client_secret = 'de285bc72e1d4e85a73252d06f597c54'; // Your secret
+var client_id = process.env.CLIENT_ID; // Your client id
+var client_secret = process.env.CLIENT_SECRET; // Your secret
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
 // view engine setup

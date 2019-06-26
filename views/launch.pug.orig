@@ -25,16 +25,30 @@ block content
         .card(id = 'user-card', class='user-profile') 
       .card.bg-dark.text-white(id='graph' class='bubbleChart') 
         .card-header
+<<<<<<< HEAD
+          h1.mb-1  Your Recently Played
+          h3 Positivity vs Energy
+=======
           h2.mb-1  Your Recently Played
           h4 Positivity vs Energy
+>>>>>>> bea1688... launch without button redirect
         .card-body
           #graph
-          #legend
       .card.bg-dark.text-white(id='mm' class='miniMetricCard') 
         .card-header(id='mm-header' class='miniMetricCard-header')
             h3.mb-1  Audio Features
         .card-body
           #miniMetric
+<<<<<<< HEAD
+
+
+
+      //.card.bg-dark.text-white(id='mm' class='miniMetric') 
+      
+
+
+=======
+>>>>>>> bea1688... launch without button redirect
 
   script(type="text/javascript" src ='/javascripts/launch.js')
   script.

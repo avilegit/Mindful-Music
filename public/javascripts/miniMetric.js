@@ -39,7 +39,7 @@ var miniMetric = function (data) {
 
     const colours = d3.scaleLinear()
         .domain([0,metrics.length - 1])
-        .range(['#18CAE6','#18CAFF']);
+        .range(['#ff0066','#ff6666']);
 
     var tooltip = d3.select("#miniMetric")
                 .append("div")
