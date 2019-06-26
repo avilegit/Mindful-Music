@@ -2,7 +2,7 @@ var miniMetric = function (data) {
 
     var margin = {top: 5, right: 30, bottom: 60, left: 30};
 
-    var height = 350 - margin.top - margin.bottom,
+    var height = 325 - margin.top - margin.bottom,
     width = 240 - margin.left - margin.right,
     animateDuration = 700,
     animateDelay = 30;
@@ -39,7 +39,7 @@ var miniMetric = function (data) {
 
     const colours = d3.scaleLinear()
         .domain([0,metrics.length - 1])
-        .range(['#18CAE6','#18CAFF']);
+        .range(['#ff0066','#ff6666']);
 
     var tooltip = d3.select("#miniMetric")
                 .append("div")
@@ -81,7 +81,7 @@ var miniMetric = function (data) {
                                 return tooltip.style("visibility", "visible");
                             })
                             .on("mousemove", function(){
-                                return tooltip.style("top", (d3.event.pageY- 520)+"px").style("left",(d3.mouse(this)[0]+80)+"px");
+                                return tooltip.style("top", (d3.mouse(this)[1])+"px").style("left",(d3.mouse(this)[0])+"px");
                             })
                             .on("mouseout", function(){
                                 d3.select(this).style('opacity', 1);

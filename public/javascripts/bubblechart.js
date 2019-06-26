@@ -4,6 +4,8 @@ var bubbleChart = function (data) {
 
     var height = 500  - margin.top - margin.bottom,    //627
         width = 500 - margin.left - margin.right;
+    
+    var imgWidth = 250;
 
     var svg = d3.select('#graph')
                     .append('svg')
@@ -14,6 +16,62 @@ var bubbleChart = function (data) {
 
     var radiusScale = d3.scaleSqrt().domain([1,50]).range([7,130])
 
+
+    popColours = ['#ff0066','#ffcc00']
+    const popColourScale = d3.scaleLinear()
+        .domain([0,100])
+        .range([popColours[0],popColours[1]]);
+
+
+    var legendsvg = d3.select('#graph')
+        .select('svg')
+    
+    var grad = legendsvg.append('defs')
+        .append('linearGradient')
+        .attr('id', 'linear-gradient')
+        .attr('x1', '0%')
+        .attr('x2', '0%')
+        .attr('y1', '0%')
+        .attr('y2', '100%');
+    
+    grad.selectAll('stop')
+        .data(popColours.reverse())
+        .enter()
+        .append('stop')
+        .style('stop-color', function(d){ return d; })
+        .attr('offset', function(d,i){
+            return 100 * (i / (popColours.length - 1)) + '%';
+        })
+    
+    legendsvg.append('rect')
+        .attr('x', width + margin.right)
+        .attr('y', margin.top)
+        .attr('width', 25)
+        .attr('height', 150)
+        .style('fill', 'url(#linear-gradient)');
+
+    legendsvg.append("text")
+        .attr("class", "legendTitle")
+        .attr("x", width)
+        .attr("y", 20)
+        .style("text-anchor", "left")
+        .style("fill", "white")
+        .text("Popularity");
+
+    //create tick marks
+    var xLeg = d3.scaleLinear()
+        .domain([100, 0])
+        .range([0, 150]);
+
+    var axisLeg = d3.axisLeft(xLeg)
+        .tickValues(popColourScale.domain())
+
+    legendsvg
+        .attr("class", "axis")
+        .append("g")
+        .attr("transform", "translate(" + (width + margin.right) + "," + margin.top + ")")
+        .call(axisLeg);
+    
     var x = d3.scaleLinear()
         .domain([0, 100])
         .range([ 0, width ]);
@@ -62,40 +120,38 @@ var bubbleChart = function (data) {
         .style('font-size','20')
         .text("Energy (%)");
 
-        var size = 20
-        var allGroups = ["Instrumental", "Non-Instrumental"]
+        // var size = 20
+        // var allGroups = ["Instrumental", "Non-Instrumental"]
 
-        svg.selectAll("myrect")
-          .data(allGroups)
-          .enter()
-          .append("circle")
-            .attr("cx", 310)
-            .attr("cy", function(d,i){ return 10 + i*(size+5)}) // 100 is where the first dot appears. 25 is the distance between dots
-            .attr("r", 7)
-            .style("fill", function(d,i){ 
-                var returnColor;
-                if (d === "Instrumental") { returnColor = "SpringGreen";}
-                else { returnColor = '#6600FF'; }
-                return returnColor;
-            })
-            // .on("mouseover", highlight)
-            // .on("mouseleave", noHighlight)
+        // svg.selectAll("myrect")
+        //   .data(allGroups)
+        //   .enter()
+        //   .append("circle")
+        //     .attr("cx", 310)
+        //     .attr("cy", function(d,i){ return 10 + i*(size+5)}) // 100 is where the first dot appears. 25 is the distance between dots
+        //     .attr("r", 7)
+        //     .style("fill", function(d,i){ 
+        //         var returnColor;
+        //         if (d === "Instrumental") { returnColor = "SpringGreen";}
+        //         else { returnColor = '#6600FF'; }
+        //         return returnColor;
+        //     })
 
-        svg.selectAll("mylabels")
-            .data(allGroups)
-            .enter()
-            .append("text")
-                .attr("x", 310 + size*.8)
-                .attr("y", function(d,i){ return i * (size + 5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
-                .style("fill", function(d,i){ 
-                    var returnColor;
-                    if (d === "Instrumental") { returnColor = "SpringGreen";}
-                    else { returnColor = '#6600FF'; }
-                    return returnColor;
-                })
-                .text(function(d){ return d})
-                .attr("text-anchor", "left")
-                .style("alignment-baseline", "middle")
+        // svg.selectAll("mylabels")
+        //     .data(allGroups)
+        //     .enter()
+        //     .append("text")
+        //         .attr("x", 310 + size*.8)
+        //         .attr("y", function(d,i){ return i * (size + 5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
+        //         .style("fill", function(d,i){ 
+        //             var returnColor;
+        //             if (d === "Instrumental") { returnColor = "SpringGreen";}
+        //             else { returnColor = '#6600FF'; }
+        //             return returnColor;
+        //         })
+        //         .text(function(d){ return d})
+        //         .attr("text-anchor", "left")
+        //         .style("alignment-baseline", "middle")
      
     var simulation = d3.forceSimulation()
                     .force("x",d3.forceX(function(d){
@@ -145,18 +201,19 @@ var bubbleChart = function (data) {
                     var instrumental = d.instrumental > 0.4;
                     if (instrumental) { returnColor = "SpringGreen";}
                     else { returnColor = '#6600FF'; }
+                    return popColourScale(d.popularity);
                     return returnColor;
                 })
                 .on("mouseover", function(d){
-                    var imgstring = '<img src=' + d.image +' " ' + 'height="250" width="250">';
+                    var imgstring = '<img src=' + d.image +' " ' + 'height="'+ imgWidth + '" width="' + imgWidth + '">';
 
                     if(d.plays > 1)
                     {
-                        tooltip.html(d.name +"<br> "+ d.artist+"<br>"+ "Plays: "+d.plays + '<br>' +'<br>' + imgstring); 
+                        tooltip.html(d.name +"<br> "+ d.artist+"<br>"+ "Plays: "+d.plays +"<br>"+ 'Popularity: '+ d.popularity + '<br>' +'<br>' + imgstring); 
                     }
                     else
                     {
-                        tooltip.html(d.name +"<br> "+ d.artist + '<br>' + "<br>" + imgstring); 
+                        tooltip.html(d.name +"<br> "+ d.artist +"<br>"+ 'Popularity: '+ d.popularity + '<br>' + "<br>" + imgstring); 
                     }
                     d3.select(this).style('opacity', 1);
                     d3.select(this).style("stroke-width", 4);
@@ -166,7 +223,7 @@ var bubbleChart = function (data) {
                     return tooltip.style("visibility", "visible");
                 })
                 .on("mousemove", function(){
-                    return tooltip.style("top", (d3.event.pageY- 400)+"px").style("left",(d3.mouse(this)[0]+40)+"px");
+                    return tooltip.style("top", (d3.mouse(this)[1] - imgWidth/1.5)+"px").style("left",(d3.mouse(this)[0]+imgWidth/4)+"px");
                 })
                 .on("mouseout", function(){
                     d3.select(this).style('opacity', 0.7);
