@@ -138,6 +138,7 @@ function Parse_JSON(inRecentlyPlayed){
         dataType: "json",
         data:  JSON.stringify(dataPayload),
         success: function(response){
+            console.log('response',response);
             recentlyPlayedFormatted = JSON.parse(response)
             console.log('JSON incoming', recentlyPlayedFormatted);
             var metrics_idx = Object.keys(recentlyPlayedFormatted).length - 1
