@@ -1,11 +1,15 @@
 const app = require('./app');
 var debug = require('debug')('Mindful-Music:server');
 
-var port = normalizePort(process.env.PORT || '8888');
+var port = normalizePort('8888');
 app.set('port', port);
 var server = require('http').createServer(app);
 
-server.listen(port);
+server.listen({
+  port : port,
+  host : '0.0.0.0'
+});
+
 server.on('error', onError);
 server.on('listening', onListening);
 
