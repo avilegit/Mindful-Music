@@ -1,5 +1,6 @@
 # Mindful-Music
 Insights about what I listen to on a daily basis
+![preview image](preview.png)
 
 ## Configuration
 Create a .env file in the Mindful-Music root directory
